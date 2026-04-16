@@ -1,0 +1,32 @@
+name: Run Tests
+
+# Executa este workflow quando houver um push para o branch main
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Faz checkout do código do repositório
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configura o Python na versão especificada
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Instala todas as dependências do projeto
+      #    O -r requirements.txt instala tudo listado, incluindo o pacote local
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 4. Executa os testes com pytest e exibe output detalhado (-v)
+      - name: Run pytest
+        run: pytest tests/ -v
